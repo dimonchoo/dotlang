@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DotLang Cheat Sheet</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+  .page {
+    width: 297mm;
+    height: 210mm;
+    padding: 14mm 16mm;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: avoid; }
+  .page-1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr auto;
+    gap: 10px;
+  }
+  .page-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+  }
+  .header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #60a5fa;
+    letter-spacing: -0.5px;
+  }
+  .header .tagline { font-size: 13px; color: #94a3b8; }
+  .header .syntax {
+    margin-left: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    color: #fbbf24;
+    background: #1e293b;
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+  .header .sub { font-size: 13px; color: #94a3b8; }
+  section {
+    background: #1e293b;
+    border-radius: 10px;
+    padding: 10px 12px;
+    overflow: hidden;
+  }
+  section h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #60a5fa;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .actions-section { grid-row: 2 / 4; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table td { padding: 3px 0; }
+  table td:first-child {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-weight: 700; color: #fbbf24; width: 36px; font-size: 14px;
+  }
+  table td:nth-child(2) { font-weight: 600; color: #f1f5f9; width: 80px; }
+  table td:nth-child(3) { color: #94a3b8; font-size: 11.5px; }
+  .mod-table td:first-child { width: 32px; }
+  .mod-table td:nth-child(2) { width: 65px; }
+  .chain-row { display: flex; gap: 24px; margin-top: 2px; }
+  .chain-item { display: flex; align-items: center; gap: 8px; }
+  .chain-sym {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 18px; font-weight: 800; color: #34d399; min-width: 24px; text-align: center;
+  }
+  .chain-desc { font-size: 12px; color: #cbd5e1; }
+  .example {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11.5px; background: #0f172a; border-radius: 6px;
+    padding: 5px 10px; margin-bottom: 5px; line-height: 1.45;
+  }
+  .example .cmd { color: #fbbf24; }
+  .example .arrow { color: #34d399; }
+  .example .comment { color: #64748b; }
+  .example .target { color: #e2e8f0; }
+  .footer {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: #475569;
+    border-top: 1px solid #334155; padding-top: 6px;
+  }
+  .tip { font-size: 11.5px; color: #94a3b8; line-height: 1.5; margin-top: 4px; }
+  .tip strong { color: #fbbf24; }
+  /* Page 2 specific */
+  .row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    font-size: 12px; padding: 5px 0; border-bottom: 1px solid #0f172a; line-height: 1.4;
+  }
+  .row:last-child { border-bottom: none; }
+  .row .cmd { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+  .row .desc { color: #94a3b8; font-size: 11.5px; }
+  .sym { color: #fbbf24; font-weight: 700; }
+  .ar { color: #34d399; font-weight: 700; }
+  .tgt { color: #e2e8f0; }
+  .mod { color: #a78bfa; }
+  .nat { color: #fb923c; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 1: CHEAT SHEET ==================== -->
+<div class="page page-1">
+
+  <div class="header">
+    <h1>DotLang</h1>
+    <span class="tagline">Meta-language for human-to-AI communication</span>
+    <span class="syntax">.[action][.mod] target</span>
+  </div>
+
+  <section class="actions-section">
+    <h2>Actions</h2>
+    <table>
+      <tr><td>.!</td><td>Implement</td><td>create, build, add</td></tr>
+      <tr><td>.?</td><td>Explain</td><td>what is, how, why</td></tr>
+      <tr><td>.@</td><td>Review</td><td>check, audit, look at</td></tr>
+      <tr><td>.#</td><td>Fix</td><td>debug, investigate, repair</td></tr>
+      <tr><td>.~</td><td>Refactor</td><td>simplify, optimize, clean</td></tr>
+      <tr><td>.^</td><td>Plan</td><td>design, approach, strategy</td></tr>
+      <tr><td>.&amp;</td><td>Analyze</td><td>explore, research, compare</td></tr>
+      <tr><td>.-</td><td>Remove</td><td>delete, drop, clean up</td></tr>
+      <tr><td>.=</td><td>Update</td><td>change, modify, rename</td></tr>
+      <tr><td>.$</td><td>Git</td><td>commit, push, branch</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Modifiers</h2>
+    <table class="mod-table">
+      <tr><td>.a</td><td>All</td><td>entire scope</td></tr>
+      <tr><td>.q</td><td>Quick</td><td>brief, 2-3 sentences</td></tr>
+      <tr><td>.d</td><td>Deep</td><td>thorough, detailed</td></tr>
+      <tr><td>.s</td><td>Self</td><td>autonomous, no questions</td></tr>
+      <tr><td>.o</td><td>Only</td><td>strict scope, nothing else</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Chains</h2>
+    <div class="chain-row">
+      <div class="chain-item">
+        <span class="chain-sym">&gt;</span>
+        <span class="chain-desc">then<br><em style="color:#64748b;font-size:10px">sequential</em></span>
+      </div>
+      <div class="chain-item">
+        <span class="chain-sym">+</span>
+        <span class="chain-desc">and<br><em style="color:#64748b;font-size:10px">parallel</em></span>
+      </div>
+    </div>
+    <div class="tip" style="margin-top:12px">
+      <strong>.s</strong> = do it yourself, no questions<br>
+      <strong>.o</strong> = strict scope, don't touch anything else<br>
+      <strong>.q</strong> = max 2-3 sentences response<br>
+      Mix with natural language:<br>
+      <strong>.! auth</strong>, but JWT only — no OAuth
+    </div>
+  </section>
+
+  <section>
+    <h2>Simple</h2>
+    <div class="example">
+      <span class="cmd">.!</span> <span class="target">auth api</span><br>
+      <span class="cmd">.?.q</span> <span class="target">redis cache</span><br>
+      <span class="cmd">.#</span> <span class="target">401 login</span><br>
+      <span class="cmd">.@.a</span> <span class="target">tests</span><br>
+      <span class="cmd">.$.s</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pipelines</h2>
+    <div class="example">
+      <span class="cmd">.^</span> <span class="arrow">&gt;</span> <span class="cmd">.!</span> <span class="target">search</span><br>
+      <span class="comment">plan then implement</span>
+    </div>
+    <div class="example">
+      <span class="cmd">.@</span> <span class="arrow">&gt;</span> <span class="cmd">.#.s</span> <span class="target">api</span><br>
+      <span class="comment">review then auto-fix</span>
+    </div>
+    <div class="example">
+      <span class="cmd">.&.d</span> <span class="arrow">&gt;</span> <span class="cmd">.#.s.o</span> <span class="arrow">&gt;</span> <span class="cmd">.$.s</span> <span class="target">api.php</span><br>
+      <span class="comment">deep analyze → auto-fix only this → auto-commit</span>
+    </div>
+    <div class="example">
+      <span class="cmd">.!</span> <span class="target">tests</span> <span class="arrow">+</span> <span class="cmd">.!</span> <span class="target">docs</span><br>
+      <span class="comment">create both in parallel</span>
+    </div>
+    <div class="example">
+      <span class="cmd">.!.s</span> <span class="arrow">&gt;</span> <span class="cmd">.$.s</span> <span class="target">migration</span><br>
+      <span class="comment">full auto: implement → commit</span>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>v0.1 &mdash; DotLang</span>
+    <span>Prefix everything with a dot. That's it.</span>
+  </div>
+
+</div>
+
+<!-- ==================== PAGE 2: EXAMPLES ==================== -->
+<div class="page page-2">
+
+  <div class="header">
+    <h1>DotLang</h1>
+    <span class="sub">Examples — Real-World Patterns</span>
+  </div>
+
+  <section>
+    <h2>WordPress / PHP</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span> <span class="tgt">acf block hero</span></div>
+      <div class="desc">Create ACF block for hero section</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.#</span> <span class="tgt">cf7 form 500</span></div>
+      <div class="desc">Fix 500 error on Contact Form 7</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.@</span><span class="mod">.a</span> <span class="tgt">theme php</span></div>
+      <div class="desc">Review all PHP in theme</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.~</span> <span class="tgt">wp_query taxonomy</span></div>
+      <div class="desc">Refactor taxonomy queries</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.&</span><span class="mod">.d</span> <span class="tgt">redis cache hit rate</span></div>
+      <div class="desc">Deep analysis of Redis cache performance</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span><span class="mod">.s</span> <span class="tgt">yoast schema breadcrumbs</span></div>
+      <div class="desc">Auto-implement breadcrumb schema</div>
+    </div>
+
+    <h2 style="margin-top:10px">Laravel</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span> <span class="tgt">job process-import</span></div>
+      <div class="desc">Create a queue job for import</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.^</span> <span class="ar">></span> <span class="sym">.!</span><span class="mod">.s</span> <span class="tgt">api auth jwt</span></div>
+      <div class="desc">Plan then auto-implement JWT auth</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.#</span> <span class="tgt">horizon failed jobs</span></div>
+      <div class="desc">Debug failed Horizon jobs</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.@</span> <span class="ar">></span> <span class="sym">.~</span> <span class="tgt">eloquent n+1</span></div>
+      <div class="desc">Review then refactor N+1 queries</div>
+    </div>
+
+    <h2 style="margin-top:10px">Docker / DevOps</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.#</span> <span class="tgt">container exit code 137</span></div>
+      <div class="desc">Debug OOM-killed container</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span> <span class="tgt">docker-compose traefik</span></div>
+      <div class="desc">Create compose with Traefik</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.?</span><span class="mod">.q</span> <span class="tgt">k3s vs docker swarm</span></div>
+      <div class="desc">Quick comparison</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pipelines (multi-step)</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.&</span><span class="mod">.d</span> <span class="ar">></span> <span class="sym">.#</span><span class="mod">.s.o</span> <span class="ar">></span> <span class="sym">.$</span><span class="mod">.s</span> <span class="tgt">api.php</span></div>
+      <div class="desc">Analyze deeply → auto-fix only this → auto-commit</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.@</span><span class="mod">.a</span> <span class="ar">></span> <span class="sym">.~</span><span class="mod">.s</span> <span class="ar">></span> <span class="sym">.$</span><span class="mod">.s</span> <span class="tgt">controllers</span></div>
+      <div class="desc">Review all → auto-refactor → auto-commit</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span> <span class="tgt">tests</span> <span class="ar">+</span> <span class="sym">.!</span> <span class="tgt">docs</span></div>
+      <div class="desc">Implement tests AND docs in parallel</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.^</span><span class="mod">.d</span> <span class="ar">></span> <span class="sym">.!</span><span class="mod">.s</span> <span class="tgt">migration strategy</span></div>
+      <div class="desc">Deep plan → auto-implement migration</div>
+    </div>
+
+    <h2 style="margin-top:10px">Mixed with natural language</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span> <span class="tgt">auth</span><span class="nat">, but JWT only — no OAuth</span></div>
+      <div class="desc">Constraint after comma</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.#</span> <span class="tgt">login 500</span><span class="nat"> — Safari only</span></div>
+      <div class="desc">Extra context after dash</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.^</span> <span class="tgt">search</span><span class="nat">, 50k posts, need &lt;100ms</span></div>
+      <div class="desc">Requirements inline</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.~</span> <span class="tgt">api</span><span class="nat"> — keep backward compat</span></div>
+      <div class="desc">Constraint for refactor</div>
+    </div>
+
+    <h2 style="margin-top:10px">Git shortcuts</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.$</span></div>
+      <div class="desc">Commit (you choose message)</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.$</span><span class="mod">.s</span></div>
+      <div class="desc">Auto-commit (Claude picks message)</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.!</span><span class="mod">.s</span> <span class="ar">></span> <span class="sym">.$</span><span class="mod">.s</span> <span class="tgt">feature</span></div>
+      <div class="desc">Full auto: implement → commit</div>
+    </div>
+
+    <h2 style="margin-top:10px">Quick answers</h2>
+    <div class="row">
+      <div class="cmd"><span class="sym">.?</span> <span class="tgt">spec.md</span></div>
+      <div class="desc">Explain this file</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.?</span><span class="mod">.q</span> <span class="tgt">SOLID</span></div>
+      <div class="desc">Quick explanation (2-3 sentences)</div>
+    </div>
+    <div class="row">
+      <div class="cmd"><span class="sym">.?</span><span class="mod">.d</span> <span class="tgt">event sourcing vs CRUD</span></div>
+      <div class="desc">Deep comparison with trade-offs</div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>DotLang v0.1 — Examples</span>
+    <span>Anything after the command is free-text context. Mix freely.</span>
+  </div>
+
+</div>
+
+</body>
+</html>
