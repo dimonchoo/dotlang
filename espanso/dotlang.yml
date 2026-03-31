@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/espanso/espanso/dev/schemas/match.schema.json
+
+# DotLang — reference snippets for Espanso
+# Install: copy/symlink to ~/Library/Application Support/espanso/match/
+
+matches:
+
+  # ── Full reference ──────────────────────────────────────────
+  - trigger: ":dl"
+    label: "DotLang — full quick reference"
+    word: true
+    replace: |
+      DotLang: .! impl | .? explain | .@ review | .# fix | .~ refactor
+               .^ plan | .& analyze | .- remove | .= update | .$ git
+          Mod: .a all | .q quick | .d deep | .s auto | .o only
+        Chain: > then | + parallel
+      Example: .&.d > .#.s.o > .$.s file — analyze → fix → commit
+
+  # ── Action lookups ──────────────────────────────────────────
+  - trigger: ":dl!"
+    label: "DotLang .! implement"
+    word: true
+    replace: ".!  implement — create, build, add"
+
+  - trigger: ":dl?"
+    label: "DotLang .? explain"
+    word: true
+    replace: ".?  explain — what is, how, why"
+
+  - trigger: ":dl@"
+    label: "DotLang .@ review"
+    word: true
+    replace: ".@  review — check, audit, look at"
+
+  - trigger: ":dl#"
+    label: "DotLang .# fix"
+    word: true
+    replace: ".#  fix — debug, investigate, repair"
+
+  - trigger: ":dl~"
+    label: "DotLang .~ refactor"
+    word: true
+    replace: ".~  refactor — simplify, optimize, clean"
+
+  - trigger: ":dl^"
+    label: "DotLang .^ plan"
+    word: true
+    replace: ".^  plan — design, approach, strategy"
+
+  - trigger: ":dl&"
+    label: "DotLang .& analyze"
+    word: true
+    replace: ".&  analyze — explore, research, compare"
+
+  - trigger: ":dl-"
+    label: "DotLang .- remove"
+    word: true
+    replace: ".-  remove — delete, drop, clean up"
+
+  - trigger: ":dl="
+    label: "DotLang .= update"
+    word: true
+    replace: ".=  update — change, modify, rename"
+
+  - trigger: ":dl$"
+    label: "DotLang .$ git"
+    word: true
+    replace: ".$  git — commit, push, branch"
+
+  # ── Modifier lookups ────────────────────────────────────────
+  - trigger: ":dl.m"
+    label: "DotLang — modifiers reference"
+    word: true
+    replace: |
+      .a  all — entire scope
+      .q  quick — 2-3 sentences max
+      .d  deep — thorough, detailed
+      .s  self — autonomous, no questions
+      .o  only — strict scope, nothing else
+
+  # ── Pipeline examples ───────────────────────────────────────
+  - trigger: ":dl.p"
+    label: "DotLang — pipeline examples"
+    word: true
+    replace: |
+      .^ > .!  search          plan → implement
+      .@ > .#.s  api           review → auto-fix
+      .&.d > .#.s.o > .$.s     analyze → fix → commit
+      .! tests + .! docs       parallel
+      .!.s > .$.s  feature     full auto

@@ -92,15 +92,6 @@ DotLang is a convention — a set of rules that Claude learns from your `CLAUDE.
 
 The install script places the ruleset at `~/.claude/dotlang/CLAUDE.md` and adds a single `@import` line to your global Claude Code config.
 
-## Files
-
-| File | Purpose |
-|------|---------|
-| `CLAUDE.md` | Minimal ruleset for Claude (~1000 tokens) |
-| `SPEC.md` | Full specification with all details |
-| `cheatsheet.pdf` | Printable 2-page reference (A4 landscape) |
-| `install.sh` | One-line installer/uninstaller |
-
 ## Cheat Sheet
 
 [Download PDF](assets/cheatsheet.pdf) — printable, A4 landscape, dark theme.
@@ -111,4 +102,4 @@ The install script places the ruleset at `~/.claude/dotlang/CLAUDE.md` and adds 
 
 ## License
 
-MIT
+[MIT](LICENSE)

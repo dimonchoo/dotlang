@@ -1,12 +1,13 @@
 #!/bin/bash
-# DotLang installer for Claude Code
-# Usage: curl -fsSL https://raw.githubusercontent.com/user/dotlang/main/install.sh | bash
+# DotLang installer for Claude Code + Espanso
+# Usage: curl -fsSL https://raw.githubusercontent.com/dimonchoo/dotlang/main/install.sh | bash
 set -euo pipefail
 
 DOTLANG_DIR="$HOME/.claude/dotlang"
 CLAUDE_MD="$HOME/.claude/CLAUDE.md"
 IMPORT_LINE="@$DOTLANG_DIR/CLAUDE.md"
-RAW_URL="https://raw.githubusercontent.com/dimonchoo/dotlang/main/CLAUDE.md"
+BASE_RAW="https://raw.githubusercontent.com/dimonchoo/dotlang/main"
+ESPANSO_DIR="$HOME/Library/Application Support/espanso/match"
 
 # Colors
 GREEN='\033[0;32m'
@@ -26,9 +27,12 @@ if [[ "${1:-}" == "--uninstall" ]]; then
   fi
   if [[ -f "$CLAUDE_MD" ]] && grep -qF "$IMPORT_LINE" "$CLAUDE_MD"; then
     sed -i '' "/$(echo "$IMPORT_LINE" | sed 's/[\/&]/\\&/g')/d" "$CLAUDE_MD"
-    # Remove trailing empty lines
     sed -i '' -e :a -e '/^\n*$/{$d;N;ba' -e '}' "$CLAUDE_MD"
     info "Removed import from $CLAUDE_MD"
+  fi
+  if [[ -f "$ESPANSO_DIR/dotlang.yml" ]]; then
+    rm -f "$ESPANSO_DIR/dotlang.yml"
+    info "Removed Espanso snippets"
   fi
   info "DotLang uninstalled."
   exit 0
@@ -37,18 +41,22 @@ fi
 # Check prerequisites
 [[ -d "$HOME/.claude" ]] || error "Claude Code not found (~/.claude/ missing). Install Claude Code first."
 
-# Download CLAUDE.md
+# Download function
+download() {
+  local url="$1" dest="$2"
+  if command -v curl &>/dev/null; then
+    curl -fsSL "$url" -o "$dest"
+  elif command -v wget &>/dev/null; then
+    wget -qO "$dest" "$url"
+  else
+    error "Neither curl nor wget found."
+  fi
+}
+
+# Install Claude Code ruleset
 mkdir -p "$DOTLANG_DIR"
-
-if command -v curl &>/dev/null; then
-  curl -fsSL "$RAW_URL" -o "$DOTLANG_DIR/CLAUDE.md"
-elif command -v wget &>/dev/null; then
-  wget -qO "$DOTLANG_DIR/CLAUDE.md" "$RAW_URL"
-else
-  error "Neither curl nor wget found."
-fi
-
-info "Downloaded DotLang to $DOTLANG_DIR/CLAUDE.md"
+download "$BASE_RAW/CLAUDE.md" "$DOTLANG_DIR/CLAUDE.md"
+info "Downloaded DotLang ruleset to $DOTLANG_DIR/CLAUDE.md"
 
 # Add import to CLAUDE.md
 if [[ ! -f "$CLAUDE_MD" ]]; then
@@ -61,5 +69,14 @@ else
   info "Added import to $CLAUDE_MD"
 fi
 
+# Install Espanso snippets (if Espanso is installed)
+if [[ -d "$ESPANSO_DIR" ]]; then
+  download "$BASE_RAW/espanso/dotlang.yml" "$ESPANSO_DIR/dotlang.yml"
+  info "Installed Espanso snippets (:dl for reference)"
+else
+  warn "Espanso not found — skipping snippets (optional)"
+fi
+
 info "Done! DotLang is active in all Claude Code sessions."
-info "To uninstall: curl -fsSL <install-url> | bash -s -- --uninstall"
+info "Espanso: :dl (full ref) | :dl! :dl? :dl# ... (per action) | :dl.m (modifiers) | :dl.p (pipelines)"
+info "To uninstall: curl -fsSL $BASE_RAW/install.sh | bash -s -- --uninstall"
