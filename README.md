@@ -103,7 +103,11 @@ The install script places the ruleset at `~/.claude/dotlang/CLAUDE.md` and adds 
 
 ## Cheat Sheet
 
-Download the [printable PDF cheat sheet](cheatsheet.pdf) — 2 pages, dark theme, A4 landscape.
+[Download PDF](cheatsheet.pdf) — printable, A4 landscape, dark theme.
+
+![DotLang Cheat Sheet — Reference](assets/cheatsheet-0.png)
+
+![DotLang Cheat Sheet — Examples](assets/cheatsheet-1.png)
 
 ## License
 
